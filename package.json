@@ -1,0 +1,23 @@
+{
+  "name": "metalsmith-changed",
+  "version": "0.0.1",
+  "description": "Metalsmith plugin, do not build files that have not changed.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arve0/metalsmith-changed.git"
+  },
+  "keywords": [
+    "metalsmith",
+    "changed"
+  ],
+  "author": "Arve Seljebu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arve0/metalsmith-changed/issues"
+  },
+  "homepage": "https://github.com/arve0/metalsmith-changed#readme"
+}
