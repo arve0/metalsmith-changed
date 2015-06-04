@@ -14,6 +14,7 @@ module.exports = function(options){
 
 
   return function(files, metalsmith, done){
+    setImmediate(done); // call done when call stack is empty
     var srcDir = p.join(metalsmith._directory, metalsmith._source);
     var dstDir = p.join(metalsmith._directory, metalsmith._destination);
     if (force) {
@@ -21,8 +22,7 @@ module.exports = function(options){
       debug('force: true, building all files');
       return;
     }
-    for (var file in files) {
-      debug('checking file %s', file);
+    Object.keys(files).forEach(function(file){ // async
       var extnameSrc = p.extname(file);
       var extnameDst = extnames[extnameSrc] || extnameSrc;
       var fileSrc = p.join(srcDir, file);
@@ -33,14 +33,14 @@ module.exports = function(options){
       } catch (e) {
         // dst file does not exist
         debug(e);
-        continue;
+        return;
       }
       if (statDst.ctime.getTime() >= statSrc.ctime.getTime()) {
         // dst file is newer than src file
-        debug('not building %s', file);
         delete files[file];
+        return;
       }
-    }
-    done();
-  };
+      debug('building %s', file);
+    });
+  }
 }
