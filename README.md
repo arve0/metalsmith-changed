@@ -64,3 +64,14 @@ var metalsmith = Metalsmith(__dirname)
     if (err) throw err;
   });
 ```
+
+
+## test
+```sh
+npm install
+npm install metalsmith
+touch test/src/index.md
+npm test
+npm test
+```
+
