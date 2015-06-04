@@ -1,9 +1,10 @@
 var p = require('path');
 var fs = require('fs');
+var debug = require('debug')('metalsmith-changed');
 
 
 /**
- * Only build files which have source file newer than the outfile.
+ * Only build if dest file is older then src file.
  */
 
 module.exports = function(options){
@@ -15,15 +16,25 @@ module.exports = function(options){
   return function drafts(files, metalsmith, done){
     if (force) {
       // do nothing
+      debug('force: true, building all files');
       return;
     }
     for (var file in files) {
+      debug('checking file %s', file);
       var extnameSrc = p.extname(file);
       var extnameDst = extnames[extnameSrc] || extnameSrc;
       var fileDst = p.join(p.dirname(file), p.basename(file, extname) + extnameOut);
-      var statSrc = fs.statSync(file);
-      var statDst = fs.statSync(fileDst);
+      try {
+        var statSrc = fs.statSync(file);
+        var statDst = fs.statSync(fileDst);
+      } catch (e) {
+        // dst file does not exist
+        debug(e);
+        continue;
+      }
       if (statDst.ctime.getTime() >= statSrc.ctime.getTime()) {
+        // dst file is newer than src file
+        debug('not building %s', file);
         delete files[file];
       }
     }
