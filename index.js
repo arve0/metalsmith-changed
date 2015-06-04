@@ -14,6 +14,8 @@ module.exports = function(options){
 
 
   return function drafts(files, metalsmith, done){
+    var srcDir = p.join(metalsmith._directory, metalsmith._source);
+    var dstDir = p.join(metalsmith._directory, metalsmith._destination);
     if (force) {
       // do nothing
       debug('force: true, building all files');
@@ -23,9 +25,10 @@ module.exports = function(options){
       debug('checking file %s', file);
       var extnameSrc = p.extname(file);
       var extnameDst = extnames[extnameSrc] || extnameSrc;
-      var fileDst = p.join(p.dirname(file), p.basename(file, extname) + extnameOut);
+      var fileSrc = p.join(srcDir, file);
+      var fileDst = p.join(dstDir, p.dirname(file), p.basename(file, extnameSrc) + extnameDst);
       try {
-        var statSrc = fs.statSync(file);
+        var statSrc = fs.statSync(fileSrc);
         var statDst = fs.statSync(fileDst);
       } catch (e) {
         // dst file does not exist
