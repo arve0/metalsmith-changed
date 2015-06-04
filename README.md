@@ -1,7 +1,6 @@
 # metalsmith-changed
-Only process files that have changed. The plugin must be used with
-`.clean(false)`, as it uses the ctime of output files to decide if file should
-be processed.
+Only process files that have changed. **Must** be used with `.clean(false)`, as
+it uses the ctime of output files to decide if file should be processed.
 
 
 ## example
