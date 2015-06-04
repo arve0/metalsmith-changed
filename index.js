@@ -13,7 +13,7 @@ module.exports = function(options){
   var extnames = options.extnames || {};
 
 
-  return function drafts(files, metalsmith, done){
+  return function(files, metalsmith, done){
     var srcDir = p.join(metalsmith._directory, metalsmith._source);
     var dstDir = p.join(metalsmith._directory, metalsmith._destination);
     if (force) {
