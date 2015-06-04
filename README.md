@@ -4,14 +4,14 @@ Only process files that have changed. The plugin must be used with
 be processed.
 
 
-## Example
+## example
 ```js
 var Metalsmith = require('metalsmith');
 var changed = require('metalsmith-changed');
 
 var metalsmith = Metalsmith(__dirname)
   .clean(false)
-  .use(changed(force))
+  .use(changed())
   ... // more plugins
   .build(function(err){
     if (err) throw err;
@@ -63,6 +63,15 @@ var metalsmith = Metalsmith(__dirname)
   .build(function(err){
     if (err) throw err;
   });
+```
+
+
+## default options
+```js
+changed({
+  force: false, // force build of all files
+  extnames: {}  // map input to output extnames
+})
 ```
 
 
