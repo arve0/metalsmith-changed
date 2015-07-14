@@ -65,11 +65,36 @@ var metalsmith = Metalsmith(__dirname)
 ```
 
 
+## forcePattern
+If the option `forcePattern` is defined, files matching the pattern(s) will not
+be removed from building even if the file has not changed. `forcePattern` should
+be a string or an array of strings.
+[micromatch.any](https://github.com/jonschlinkert/micromatch#any) is used for
+matching the files.
+
+Example:
+```js
+var metalsmith = Metalsmith(__dirname)
+  .clean(false)
+  .use(changed({
+    forcePattern: [
+      '**/index.md',  // always build index files
+      ...             // more patterns
+    ]
+  }))
+  ... // more plugins
+  .build(function(err){
+    if (err) throw err;
+  });
+```
+
+
 ## default options
 ```js
 changed({
-  force: false, // force build of all files
-  extnames: {}  // map input to output extnames
+  force: false,  // force build of all files
+  extnames: {},  // map input to output extnames
+  forcePattern: ''  // always build files matching pattern(s)
 })
 ```
 
@@ -82,4 +107,3 @@ touch test/src/index.md
 npm test
 npm test
 ```
-
