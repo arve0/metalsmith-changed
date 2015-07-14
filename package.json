@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/arve0/metalsmith-changed",
   "dependencies": {
-    "debug": "^2.2.0"
+    "debug": "^2.2.0",
+    "micromatch": "^2.1.6"
   }
 }
