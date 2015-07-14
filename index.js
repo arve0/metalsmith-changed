@@ -27,7 +27,7 @@ module.exports = function(options){
 
     var statSrc, statDst;
     Object.keys(files).forEach(function(file){ // async
-      if (mm.any(file, forcePattern)) {
+      if (forcePattern && mm.any(file, forcePattern)) {
         debug('building %s', file);
         return;
       }
