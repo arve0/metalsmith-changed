@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Untitled RSS Feed]]></title><description><![CDATA[Untitled RSS Feed]]></description><link>http://example.com</link><generator>metalsmith-feed</generator><lastBuildDate>Fri, 09 Oct 2015 23:26:05 GMT</lastBuildDate><atom:link href="http://example.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[First Post]]></title><description><![CDATA[
+
+This is the first post.]]></description><guid isPermaLink="false">First Post</guid><pubDate>Thu, 01 Oct 2015 00:00:00 GMT</pubDate></item><item><title><![CDATA[Second Post]]></title><description><![CDATA[
+
+This is the second post.]]></description><guid isPermaLink="false">Second Post</guid><pubDate>Fri, 02 Oct 2015 00:00:00 GMT</pubDate></item><item><title><![CDATA[Third Post]]></title><description><![CDATA[
+
+This is the third post.]]></description><guid isPermaLink="false">Third Post</guid><pubDate>Sun, 04 Oct 2015 00:00:00 GMT</pubDate></item><item><title><![CDATA[Fourth Post]]></title><description><![CDATA[
+
+This is the fourth post.]]></description><guid isPermaLink="false">Fourth Post</guid><pubDate>Wed, 07 Oct 2015 00:00:00 GMT</pubDate></item></channel></rss>
