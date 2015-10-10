@@ -58,5 +58,7 @@ module.exports = function(options){
         debug('building (generated): %s', file);
       }
     });
+
+    done();
   };
 };
