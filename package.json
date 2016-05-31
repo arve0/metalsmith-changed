@@ -4,7 +4,8 @@
   "description": "Metalsmith plugin, do not build files that have not changed.",
   "main": "index.js",
   "scripts": {
-    "test": "DEBUG=metalsmith-changed node test/index.js"
+    "test": "DEBUG=metalsmith-changed node test/index.js",
+    "mocha": "./node_modules/.bin/mocha -R spec"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,16 @@
   "dependencies": {
     "debug": "^2.2.0",
     "micromatch": "^2.1.6"
+  },
+  "devDependencies": {
+    "assert-dir-equal": "^1.0.1",
+    "gulp": "^3.9.0",
+    "gulpsmith": "^0.5.5",
+    "metalsmith": "^2.1.0",
+    "metalsmith-collections": "^0.7.0",
+    "metalsmith-feed": "^0.2.0",
+    "metalsmith-markdown": "^0.2.1",
+    "metalsmith-permalinks": "^0.4.0",
+    "mocha": "^2.3.3"
   }
 }
