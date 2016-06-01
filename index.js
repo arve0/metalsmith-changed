@@ -3,12 +3,13 @@ const path = require('path');
 const debug = require('debug')('metalsmith-changed');
 const mm = require('micromatch');
 const DEFAULTS = {
+  force: false,
   forcePattern: false,
   ctimes: 'metalsmith-changed-ctimes.json' // where to store ctimes
 };
 
 module.exports = function (opts) {
-  opts = Object.assign({}, opts, DEFAULTS);
+  opts = Object.assign({}, DEFAULTS, opts);
   debug(`options: ${ JSON.stringify(opts) }`);
 
   /**
@@ -43,7 +44,7 @@ module.exports = function (opts) {
   return function changed(files, metalsmith, done) {
     // files are already read => safe to write current ctimes
     createCtimes(files, path.join(metalsmith.source(), opts.ctimes));
-    if (metalsmith.clean() || !files[opts.ctimes]) {
+    if (metalsmith.clean() || opts.force || !files[opts.ctimes]) {
       debug('building all files');
     } else {
       const prevCtimes = JSON.parse(files[opts.ctimes].contents.toString());

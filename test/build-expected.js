@@ -27,7 +27,7 @@ Metalsmith(src)
 Metalsmith(src)
   .clean(true)
   .use(changed())  // remove metalsmith-changed.json from build
-  .destination('expected-added')
+  .destination('expected-generated')
   .use(function (files) {
     files['asdf.md'] = {
       title: 'asdf',

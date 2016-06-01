@@ -1,2 +1,5 @@
 node_modules
 test/fixtures/build
+test/fixtures/expected
+test/fixtures/expected-generated
+test/fixtures/src/metalsmith-changed-ctimes.json
