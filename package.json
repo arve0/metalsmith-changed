@@ -4,7 +4,7 @@
   "description": "Metalsmith plugin, do not build files that have not changed.",
   "main": "index.js",
   "scripts": {
-    "build": "babel --preset es2015 index.babel.js -o index.js",
+    "build": "babel --presets es2015 index.babel.js -o index.js",
     "build-expected": "node test/build-expected.js",
     "pretest": "npm run build && npm run build-expected",
     "preversion": "npm test && git add index.js",
