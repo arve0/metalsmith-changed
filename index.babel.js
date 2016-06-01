@@ -4,12 +4,12 @@ const debug = require('debug')('metalsmith-changed');
 const mm = require('micromatch');
 const DEFAULTS = {
   forcePattern: false,
-  ctimes: 'metalsmith-changed-ctimes.json' // where to store ctimes
+  ctimes: 'metalsmith-changed-ctimes.json'  // where to store ctimes
 };
 
 module.exports = function (opts) {
   opts = Object.assign({}, opts, DEFAULTS);
-  debug(`options: ${ JSON.stringify(opts) }`);
+  debug(`options: ${JSON.stringify(opts)}`);
 
   /**
    * Return true if filename does not match `opts.forcePattern`.
@@ -25,22 +25,22 @@ module.exports = function (opts) {
    * @param files {object}
    * @param filename {string}
    */
-  function createCtimes(files, filename) {
+  function createCtimes (files, filename) {
     // write ctimes to input folder
-    let ctimes = {}; // { 'index.md': 1464763631540, ... }
+    let ctimes = {};  // { 'index.md': 1464763631540, ... }
     let filenames = Object.keys(files);
     for (let f of filenames) {
       if (!hasCtime(files[f])) {
         continue;
       }
       let ctime = files[f].stats.ctime.getTime();
-      debug(`ctime ${ f }: ${ ctime }`);
+      debug(`ctime ${f}: ${ctime}`);
       ctimes[f] = ctime;
     }
     fs.writeFileSync(filename, JSON.stringify(ctimes, null, 2));
   }
 
-  return function changed(files, metalsmith, done) {
+  return function changed (files, metalsmith, done) {
     // files are already read => safe to write current ctimes
     createCtimes(files, path.join(metalsmith.source(), opts.ctimes));
     if (metalsmith.clean() || !files[opts.ctimes]) {
@@ -50,12 +50,12 @@ module.exports = function (opts) {
       const filenames = Object.keys(files).filter(notForced);
       for (let f of filenames) {
         if (!hasCtime(files[f])) {
-          debug(`${ f } does not have ctime`);
+          debug(`${f} does not have ctime`);
           continue;
         }
         // file has not changed
         if (prevCtimes[f] && files[f].stats.ctime.getTime() === prevCtimes[f]) {
-          debug(`skipping ${ f }`);
+          debug(`skipping ${f}`);
           delete files[f];
         }
       }
@@ -66,6 +66,7 @@ module.exports = function (opts) {
   };
 };
 
-function hasCtime(file) {
+function hasCtime (file) {
   return file.stats && file.stats.ctime;
 }
+

@@ -1,6 +1,8 @@
 # metalsmith-changed
 Only process files that have changed. **Must** be used with `.clean(false)`, as
-it uses the ctime of output files to decide if file should be processed.
+it removes files from the build. `Metalsmith.clean(true)` will disable this plugin.
+
+Writes a json file with ctimes to your `src`-folder.
 
 
 ## example
@@ -8,31 +10,27 @@ it uses the ctime of output files to decide if file should be processed.
 var Metalsmith = require('metalsmith');
 var changed = require('metalsmith-changed');
 
-var metalsmith = Metalsmith(__dirname)
+Metalsmith()
   .clean(false)
   .use(changed())
   ... // more plugins
-  .build(function(err){
+  .build(function (err) {
     if (err) throw err;
   });
 ```
 
-
 Which is useful when using `gulp.watch`:
-
 ```js
 var Metalsmith = require('metalsmith');
 var changed = require('metalsmith-changed');
 var gulp = require('gulp');
 var path = require('path');
 
-function build(force){
-  return function(cb){
-    var metalsmith = Metalsmith(__dirname)
-      .clean(false)
-      .use(changed({
-        force: force // forces build even if files has not changed
-      }))
+function build (force) {
+  return function (cb) {
+    Metalsmith()
+      .clean(force)  // forces build even if files has not changed
+      .use(changed())
       ... // more plugins
       .build(cb);
   }
@@ -46,35 +44,23 @@ gulp.watch(path.join(__dirname, 'templates', '**'), build(true));
 ```
 
 
-## extnames
-As default, the plugin looks for same extname in build folder. When converting
-files, say from markdown to html, define an extname map:
+## metalsmith-changed-ctimes.json
+`metalsmith-changed-ctimes.json` is written to your `src` folder upon every build. `metalsmith-changed` takes ctimes from `files[n].stats.ctime`, so if your plugin creates files with `.stats.ctime`, `metalsmith-changed` can be used  with it.
 
-```js
-var metalsmith = Metalsmith(__dirname)
-  .clean(false)
-  .use(changed({
-    extnames: {
-      '.md': '.html' // build if src/file.md is newer than build/file.html
-    }
-  }))
-  ... // more plugins
-  .build(function(err){
-    if (err) throw err;
-  });
-```
+Files which does not have `stats.ctime` is ignored.
 
 
 ## forcePattern
 If the option `forcePattern` is defined, files matching the pattern(s) will not
 be removed from building even if the file has not changed. `forcePattern` should
 be a string or an array of strings.
-[micromatch.any](https://github.com/jonschlinkert/micromatch#any) is used for
+
+[micromatch](https://github.com/jonschlinkert/micromatch) is used for
 matching the files.
 
 Example:
 ```js
-var metalsmith = Metalsmith(__dirname)
+Metalsmith()
   .clean(false)
   .use(changed({
     forcePattern: [
@@ -92,18 +78,20 @@ var metalsmith = Metalsmith(__dirname)
 ## default options
 ```js
 changed({
-  force: false,  // force build of all files
-  extnames: {},  // map input to output extnames
-  forcePattern: ''  // always build files matching pattern(s)
+  forcePattern: false  // always build files matching these patterns
 })
 ```
 
 
-## test
+## scripts
 ```sh
-npm install
-npm install metalsmith
-touch test/src/index.md
+npm build-expected  # see test/fixtures
 npm test
-npm test
+npm build  # babel
+```
+
+## release
+```sh
+npm version patch|minor|major
+npm publish
 ```
