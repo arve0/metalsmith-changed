@@ -80,6 +80,7 @@ Metalsmith()
 ## default options
 ```js
 changed({
+  force: false,  // build all files
   forcePattern: false  // always build files matching these patterns
 })
 ```

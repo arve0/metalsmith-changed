@@ -35,6 +35,20 @@ describe('metalsmith-changed', function () {
       });
   });
 
+  it('should build all files on force: true', function (done) {
+    Metalsmith(FIXTURES)
+      .clean(false)
+      .use(changed({
+        force: true
+      }))
+      .build(function (err, files) {
+        assert.equal(Object.keys(files).length, 2);
+
+        dirEqual(join(FIXTURES, 'expected'), join(FIXTURES, 'build'));
+        done(err);
+      });
+  });
+
   it('should build files which has new ctime', function (done) {
     touch.sync(join(FIXTURES, '/src/changed.md'));
 
@@ -73,7 +87,7 @@ describe('metalsmith-changed', function () {
       .build(function (err, files) {
         assert.equal(Object.keys(files).length, 2);
 
-        dirEqual(join(FIXTURES, 'expected-added'), join(FIXTURES, 'build'));
+        dirEqual(join(FIXTURES, 'expected-generated'), join(FIXTURES, 'build'));
         done(err);
       });
   });
