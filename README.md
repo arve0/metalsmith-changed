@@ -49,7 +49,7 @@ gulp.watch(path.join(__dirname, 'templates', '**'), build(true));
 ## metalsmith-changed-ctimes.json
 `metalsmith-changed-ctimes.json` is written to your `src` folder upon every build. `metalsmith-changed` takes ctimes from `files[n].stats.ctime`, so if your plugin creates files with `.stats.ctime`, `metalsmith-changed` can be used  with it.
 
-Files which does not have `stats.ctime` is ignored.
+Files without `stats.ctime` are always built.
 
 
 ## forcePattern
