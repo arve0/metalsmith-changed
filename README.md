@@ -86,11 +86,11 @@ changed({
 ```
 
 
-## scripts
+## develop
 ```sh
-npm build-expected  # see test/fixtures
-npm test
 npm build  # babel
+npm test
+DEBUG=metalsmith-changed npm test  # test with debug output
 ```
 
 ## release
