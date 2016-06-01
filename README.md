@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/metalsmith-changed.svg)](https://badge.fury.io/js/metalsmith-changed) [![Build Status](https://travis-ci.org/arve0/metalsmith-changed.svg?branch=master)](https://travis-ci.org/arve0/metalsmith-changed)
+
 # metalsmith-changed
 Only process files that have changed. **Must** be used with `.clean(false)`, as
 it removes files from the build. `Metalsmith.clean(true)` will disable this plugin.
