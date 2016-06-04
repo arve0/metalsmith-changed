@@ -1,10 +1,13 @@
 [![npm version](https://badge.fury.io/js/metalsmith-changed.svg)](https://badge.fury.io/js/metalsmith-changed) [![Build Status](https://travis-ci.org/arve0/metalsmith-changed.svg?branch=master)](https://travis-ci.org/arve0/metalsmith-changed)
 
 # metalsmith-changed
-Only process files that have changed. **Must** be used with `.clean(false)`, as
-it removes files from the build. `Metalsmith.clean(true)` will disable this plugin.
+Only process files that have changed.
 
-Writes a json file with ctimes to your `src`-folder.
+metalsmith-changed will write a ctimes json-file to your `src`-folder in order to keep track of changed files.
+
+ **Must** be used with `metalsmith.clean(false)`, `.clean(true)` (the default) disables metalsmith-changed and all files are passed on to the next plugin.
+
+ metalsmith-changed can also be disabled with `force: true` and individual files can be ignored (always build) with `forcePattern`.
 
 
 ## example
@@ -21,12 +24,11 @@ Metalsmith()
   });
 ```
 
-Which is useful when using `gulp.watch`:
+Which is useful when using a watcher:
 ```js
 var Metalsmith = require('metalsmith');
 var changed = require('metalsmith-changed');
-var gulp = require('gulp');
-var path = require('path');
+var watch = require('glob-watcher');
 
 function build (force) {
   return function (cb) {
@@ -39,18 +41,13 @@ function build (force) {
 }
 
 // only build changed files
-gulp.watch(path.join(__dirname, 'src', '**'), build(false));
+watch('src/**'), build(false));
 
 // force build of all files
-gulp.watch(path.join(__dirname, 'templates', '**'), build(true));
+watch('templates/**'), build(true));
 ```
 
-
-## metalsmith-changed-ctimes.json
-`metalsmith-changed-ctimes.json` is written to your `src` folder upon every build. `metalsmith-changed` takes ctimes from `files[n].stats.ctime`, so if your plugin creates files with `.stats.ctime`, `metalsmith-changed` can be used  with it.
-
-Files without `stats.ctime` are always built.
-
+As ctimes are persisted to disk, this works nice with cli tools like [watch run](https://www.npmjs.com/package/watch-run) also.
 
 ## forcePattern
 If the option `forcePattern` is defined, files matching the pattern(s) will not
@@ -84,6 +81,12 @@ changed({
   forcePattern: false  // always build files matching these patterns
 })
 ```
+
+
+## metalsmith-changed-ctimes.json
+`metalsmith-changed-ctimes.json` is written to your `src` folder upon every build. `metalsmith-changed` takes ctimes from `files[n].stats.ctime`, so if a plugin creates files with `.stats.ctime`, `metalsmith-changed` can be used with it.
+
+Files without `stats.ctime` are always built.
 
 
 ## develop
