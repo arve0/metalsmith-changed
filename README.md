@@ -24,30 +24,56 @@ Metalsmith()
   });
 ```
 
-Which is useful when using a watcher:
+Which is useful when watching files and livereloading:
 ```js
-var Metalsmith = require('metalsmith');
-var changed = require('metalsmith-changed');
-var watch = require('glob-watcher');
+const Metalsmith = require('metalsmith');
+const changed = require('metalsmith-changed');
+const livereload = require('metalsmith-livereload');
+const nodeStatic = require('node-static');
+const watch = require('glob-watcher');
+const open = require('open');
 
-function build (force) {
-  return function (cb) {
-    Metalsmith()
-      .clean(force)  // forces build even if files has not changed
-      .use(changed())
-      ... // more plugins
-      .build(cb);
-  }
-}
+const DIR = __dirname + '/test/fixtures/';
 
-// only build changed files
-watch('src/**'), build(false));
+/**
+ * Build with metalsmith.
+ */
+const build = (clean = false) => (done) => {
+  console.log(`Building. clean: ${clean}.`);
+  Metalsmith(DIR)
+    .clean(clean)
+    .use(changed())
+//    .use(expensivePlugin())  // ie markdown -> html
+    .use(livereload({ debug: true }))
+    .build((err, files) => {
+      let filenames = Object.keys(files).join(', ');
+      console.log('Built: ' + filenames);
+      done(err);
+    });
+};
 
-// force build of all files
-watch('templates/**'), build(true));
+/**
+ * Serve files.
+ */
+var serve = new nodeStatic.Server(DIR + 'build');
+require('http').createServer((req, res) => {
+  req.addListener('end', () => serve.serve(req, res));
+  req.resume();
+}).listen(8080);
+
+/**
+ * Watch files.
+ */
+watch(DIR + 'src/**/*', { ignoreInitial: false }, build(false));
+// watch(DIR + 'templates/**/*', build(true));  // force build of all files
+
+/**
+ * Open browser.
+ */
+open('http://localhost:8080');
 ```
 
-As ctimes are persisted to disk, this works nice with cli tools like [watch run](https://www.npmjs.com/package/watch-run) also.
+As ctimes are persisted to disk, this works nice with cli tools like [watch run](https://www.npmjs.com/package/watch-run) too.
 
 ## forcePattern
 If the option `forcePattern` is defined, files matching the pattern(s) will not

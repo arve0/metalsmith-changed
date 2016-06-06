@@ -33,8 +33,12 @@
     "assert-dir-equal": "^1.0.1",
     "babel-cli": "*",
     "babel-preset-es2015": "*",
+    "glob-watcher": "^3.0.0",
     "metalsmith": "^2.1.0",
+    "metalsmith-livereload": "0.0.1",
     "mocha": "^2.3.3",
+    "node-static": "^0.7.7",
+    "open": "0.0.5",
     "touch": "^1.0.0"
   }
 }
