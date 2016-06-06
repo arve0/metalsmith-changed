@@ -20,34 +20,13 @@ module.exports = function (opts) {
     return pattern === false || !mm.isMatch(filename, pattern);
   };
 
-  /**
-   * Write ctimes to `filename`.
-   *
-   * @param files {object}
-   * @param filename {string}
-   */
-  function createCtimes (files, filename) {
-    // write ctimes to input folder
-    let ctimes = {};  // { 'index.md': 1464763631540, ... }
-    let filenames = Object.keys(files);
-    for (let f of filenames) {
-      if (!hasCtime(files[f])) {
-        continue;
-      }
-      let ctime = files[f].stats.ctime.getTime();
-      debug(`ctime ${f}: ${ctime}`);
-      ctimes[f] = ctime;
-    }
-    fs.writeFileSync(filename, JSON.stringify(ctimes, null, 2));
-  }
-
   return function changed (files, metalsmith, done) {
     // files are already read => safe to write current ctimes
-    createCtimes(files, path.join(metalsmith.source(), opts.ctimes));
+    files[opts.ctimes] = createCtimes(files);
     if (metalsmith.clean() || opts.force || !files[opts.ctimes]) {
       debug('building all files');
     } else {
-      const prevCtimes = JSON.parse(files[opts.ctimes].contents.toString());
+      const prevCtimes = readCtimes(metalsmith.destination(), opts.ctimes);
       const filenames = Object.keys(files).filter(notForced);
       for (let f of filenames) {
         if (!hasCtime(files[f])) {
@@ -61,13 +40,47 @@ module.exports = function (opts) {
         }
       }
     }
-    // remove opts.ctimes from the build
-    delete files[opts.ctimes];
     done();
   };
 };
 
 function hasCtime (file) {
   return file.stats && file.stats.ctime;
+}
+
+/**
+ * Create a ctimes object of files.
+ *
+ * @param files {object}
+ * @returns {object} Ctimes, { filename: Date.getTime(), ... }
+ */
+function createCtimes (files) {
+  let ctimes = {};  // { 'index.md': 1464763631540, ... }
+  let filenames = Object.keys(files);
+  for (let f of filenames) {
+    if (!hasCtime(files[f])) {
+      continue;
+    }
+    let ctime = files[f].stats.ctime.getTime();
+    debug(`ctime ${f}: ${ctime}`);
+    ctimes[f] = ctime;
+  }
+  return { contents: JSON.stringify(ctimes, null, 2) };
+}
+
+/**
+ * Get ctimes from filename.
+ *
+ * @param folder {string} Path to destination folder.
+ * @param filename {string} Filename.
+ * @returns {object} Ctimes object.
+ */
+function readCtimes (folder, filename) {
+  try {
+    let content = fs.readFileSync(path.join(folder, filename), 'utf8');
+    return JSON.parse(content);
+  } catch (e) {
+    return {};
+  }
 }
 

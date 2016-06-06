@@ -30,7 +30,6 @@
     "micromatch": "^2.3.8"
   },
   "devDependencies": {
-    "assert-dir-equal": "^1.0.1",
     "babel-cli": "*",
     "babel-preset-es2015": "*",
     "glob-watcher": "^3.0.0",
