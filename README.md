@@ -3,7 +3,7 @@
 # metalsmith-changed
 Only process files that have changed.
 
-metalsmith-changed will write a ctimes json-file to your `src`-folder in order to keep track of changed files.
+metalsmith-changed will write a ctimes json-file to your `build`-folder in order to keep track of changed files.
 
  **Must** be used with `metalsmith.clean(false)`, `.clean(true)` (the default) disables metalsmith-changed and all files are passed on to the next plugin.
 
@@ -110,7 +110,7 @@ changed({
 
 
 ## metalsmith-changed-ctimes.json
-`metalsmith-changed-ctimes.json` is written to your `src` folder upon every build. `metalsmith-changed` takes ctimes from `files[n].stats.ctime`, so if a plugin creates files with `.stats.ctime`, `metalsmith-changed` can be used with it.
+`metalsmith-changed-ctimes.json` is written to your `build` folder upon every build. `metalsmith-changed` takes ctimes from `files[n].stats.ctime`, so if a plugin creates files with `.stats.ctime`, `metalsmith-changed` can be used with it.
 
 Files without `stats.ctime` are always built.
 
