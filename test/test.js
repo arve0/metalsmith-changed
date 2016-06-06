@@ -4,7 +4,6 @@
 var fs = require('fs');
 var touch = require('touch');
 var assert = require('assert');
-var dirEqual = require('assert-dir-equal');
 var join = require('path').join;
 
 var Metalsmith = require('metalsmith');
@@ -23,14 +22,14 @@ describe('metalsmith-changed', function () {
     });
   });
 
-  it('should always remove `metalsmith-changed-ctimes.json`', function (done) {
+  it('should add `metalsmith-changed-ctimes.json`', function (done) {
     Metalsmith(FIXTURES)
       .clean(true)
       .use(changed())
       .build(function (err, files) {
         var ctimes = 'metalsmith-changed-ctimes.json';
-        var ctimesNotFound = Object.keys(files).indexOf(ctimes) === -1;
-        assert(ctimesNotFound);
+        var ctimesFound = Object.keys(files).indexOf(ctimes) !== -1;
+        assert(ctimesFound, ctimes + ' not found');
         done(err);
       });
   });
@@ -42,28 +41,25 @@ describe('metalsmith-changed', function () {
         force: true
       }))
       .build(function (err, files) {
-        assert.equal(Object.keys(files).length, 2);
-
-        dirEqual(join(FIXTURES, 'expected'), join(FIXTURES, 'build'));
+        // three files including ctimes.json
+        assert.equal(Object.keys(files).length, 3);
         done(err);
       });
   });
 
-  it('should build files which has new ctime', function (done) {
+  it('should only build files which has new ctime', function (done) {
     touch.sync(join(FIXTURES, '/src/changed.md'));
 
     Metalsmith(FIXTURES)
       .clean(false)
       .use(changed())
       .build(function (err, files) {
-        assert.equal(Object.keys(files).length, 1);
-
-        dirEqual(join(FIXTURES, 'expected'), join(FIXTURES, 'build'));
+        assert.equal(Object.keys(files).length, 2);
         done(err);
       });
   });
 
-  it('should build files without `file.stats.ctime`', function (done) {
+  it('should not remove files missing `file.stats.ctime`', function (done) {
     /**
      * Typically files created through other plugins.
      */
@@ -85,9 +81,7 @@ describe('metalsmith-changed', function () {
       })
       .use(changed())
       .build(function (err, files) {
-        assert.equal(Object.keys(files).length, 2);
-
-        dirEqual(join(FIXTURES, 'expected-generated'), join(FIXTURES, 'build'));
+        assert.equal(Object.keys(files).length, 3);
         done(err);
       });
   });
