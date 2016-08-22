@@ -17,7 +17,7 @@ module.exports = function (opts) {
    */
   const notForced = function (filename) {
     const pattern = opts.forcePattern;
-    return pattern === false || !mm.isMatch(filename, pattern);
+    return pattern === false || !mm.any(filename, pattern);
   };
 
   return function changed (files, metalsmith, done) {

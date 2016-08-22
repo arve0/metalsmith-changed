@@ -47,6 +47,18 @@ describe('metalsmith-changed', function () {
       });
   });
 
+  it('should work with [array, of, patterns]', function (done) {
+    Metalsmith(FIXTURES)
+      .clean(false)
+      .use(changed({
+        forcePattern: ['asdf', '*.md']
+      }))
+      .build(function (err, files) {
+        assert.equal(Object.keys(files).length, 2);
+        done(err);
+      });
+  });
+
   it('should only build files which has new ctime', function (done) {
     touch.sync(join(FIXTURES, '/src/changed.md'));
 

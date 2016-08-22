@@ -19,7 +19,7 @@ module.exports = function (opts) {
    */
   var notForced = function notForced(filename) {
     var pattern = opts.forcePattern;
-    return pattern === false || !mm.isMatch(filename, pattern);
+    return pattern === false || !mm.any(filename, pattern);
   };
 
   return function changed(files, metalsmith, done) {
