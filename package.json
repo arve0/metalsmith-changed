@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel --presets es2015 index.babel.js -o index.js",
-    "build-expected": "node test/build-expected.js",
-    "pretest": "npm run build && npm run build-expected",
+    "pretest": "npm run build",
     "preversion": "npm test && git add index.js",
     "postpublish": "git push && git push --tags",
     "test": "mocha"
