@@ -26,7 +26,7 @@ module.exports = function (opts) {
   return function changed(files, metalsmith, done) {
     // files are already read => safe to write current ctimes
     files[opts.ctimes] = createCtimes(files);
-    if (metalsmith.clean() || opts.force || !files[opts.ctimes] || contains(files, opts.forceAllPattern)) {
+    if (metalsmith.clean() || opts.force || contains(files, opts.forceAllPattern)) {
       debug('building all files');
     } else {
       var prevCtimes = readCtimes(metalsmith.destination(), opts.ctimes);
