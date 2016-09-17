@@ -5,6 +5,7 @@ const mm = require('micromatch');
 const DEFAULTS = {
   force: false,
   forcePattern: false,
+  forceAllPattern: false,
   ctimes: 'metalsmith-changed-ctimes.json'  // where to store ctimes
 };
 
@@ -23,7 +24,8 @@ module.exports = function (opts) {
   return function changed (files, metalsmith, done) {
     // files are already read => safe to write current ctimes
     files[opts.ctimes] = createCtimes(files);
-    if (metalsmith.clean() || opts.force || !files[opts.ctimes]) {
+    if (metalsmith.clean() || opts.force || !files[opts.ctimes] ||
+        contains(files, opts.forceAllPattern)) {
       debug('building all files');
     } else {
       const prevCtimes = readCtimes(metalsmith.destination(), opts.ctimes);
@@ -84,3 +86,9 @@ function readCtimes (folder, filename) {
   }
 }
 
+/**
+ * Returns true if some of the files matches the pattern.
+ */
+function contains (files, pattern) {
+  return mm(Object.keys(files), pattern).length !== 0;
+}

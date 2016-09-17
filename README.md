@@ -105,6 +105,7 @@ Metalsmith()
 changed({
   force: false,  // build all files
   forcePattern: false,  // always build files matching these patterns
+  forceAllPattern: false,  // force build of all files if files matching this pattern is changed
   ctimes: 'metalsmith-changed-ctimes.json'  // where to store ctimes, relative to the build folder
 })
 ```
