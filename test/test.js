@@ -98,4 +98,22 @@ describe('metalsmith-changed', function () {
       });
   });
 
+  it('should force build all files when metafiles are changed', function (done) {
+
+    Metalsmith(FIXTURES)
+      .clean(false)
+      .use(function (files) {
+        files['metafile.json'] = {
+          title: 'asdf',
+          contents: '1234'
+        };
+      })
+      .use(changed({
+        forceAllPattern: 'metafile.json'
+      }))
+      .build(function (err, files) {
+        assert.equal(Object.keys(files).length, 4);
+        done(err);
+      });
+  });
 });
