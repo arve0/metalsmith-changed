@@ -104,7 +104,8 @@ Metalsmith()
 ```js
 changed({
   force: false,  // build all files
-  forcePattern: false  // always build files matching these patterns
+  forcePattern: false,  // always build files matching these patterns
+  ctimes: 'metalsmith-changed-ctimes.json'  // where to store ctimes, relative to the build folder
 })
 ```
 
